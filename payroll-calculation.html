@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maverick Payroll Calculator</title>
+    <!-- Link to your CSS stylesheet -->
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+</head>
+<body class="bg-gray-100 p-10">
+  <div class="max-w-md mx-auto bg-white p-6 rounded shadow">
+    <h1 class="text-xl font-bold mb-4">Solo Payroll Calculator (NY)</h1>
+
+    <label class="block mb-2">Annual Gross Salary ($)</label>
+    <input id="grossSalary" type="number" class="w-full border p-2 mb-4" />
+
+    <label class="block mb-2">Pay Frequency</label>
+    <select id="payFrequency" class="w-full border p-2 mb-4">
+      <option value="biweekly">Biweekly</option>
+      <option value="monthly">Monthly</option>
+    </select>
+
+    <button onclick="calculatePayroll()" class="bg-blue-500 text-white px-4 py-2 rounded">Calculate</button>
+
+    <div id="results" class="mt-6"></div>
+  </div>
+
+    <script src="js-payroll-calculation">
+        //Assuming single filer, and no additional city taxes etc. No variability for states.
+        function calculatePayroll() {
+        //Define tax rates - would have to reference some sort of online source in future
+        socialSecurityTaxRate = 0.062;
+        medicareTaxRate = 0.0145;
+        stateTaxRate = 0.061; //assuming NYS for now - needs to have logic behind this for diff states
+
+        //Pull gross salary and pay frequency from form
+        const grossSalary = parseFloat(document.getElementById('grossSalary').value);
+        const frequency = document.getElementById('payFrequency').value;
+
+        //Calculate number of pay periods, pay per period, and annual federal tax using function
+        const periods = frequency === 'biweekly' ? 26 : 12;
+        let payPerPeriod = grossSalary / periods;
+        let annualFederalTax = calculateFederalTax(grossSalary);
+
+        //Calculate all taxes for each pay period
+        let periodFederalTax = annualFederalTax / periods;
+        let periodSocialSecurityTax = payPerPeriod * socialSecurityTaxRate;
+        let periodMedicareTax = payPerPeriod * medicareTaxRate;
+        let periodStateTax = payPerPeriod * stateTaxRate;
+
+        //Calculate total tax and net pay
+        let periodTotalTax = periodFederalTax + periodSocialSecurityTax + periodMedicareTax + periodStateTax;
+        let periodNetPay = payPerPeriod - periodTotalTax;
+
+}
+    </script>
+</body>
