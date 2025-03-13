@@ -25,33 +25,5 @@
     <div id="results" class="mt-6"></div>
   </div>
 
-    <script src="js-payroll-calculation">
-        //Assuming single filer, and no additional city taxes etc. No variability for states.
-        function calculatePayroll() {
-        //Define tax rates - would have to reference some sort of online source in future
-        socialSecurityTaxRate = 0.062;
-        medicareTaxRate = 0.0145;
-        stateTaxRate = 0.061; //assuming NYS for now - needs to have logic behind this for diff states
-
-        //Pull gross salary and pay frequency from form
-        const grossSalary = parseFloat(document.getElementById('grossSalary').value);
-        const frequency = document.getElementById('payFrequency').value;
-
-        //Calculate number of pay periods, pay per period, and annual federal tax using function
-        const periods = frequency === 'biweekly' ? 26 : 12;
-        let payPerPeriod = grossSalary / periods;
-        let annualFederalTax = calculateFederalTax(grossSalary);
-
-        //Calculate all taxes for each pay period
-        let periodFederalTax = annualFederalTax / periods;
-        let periodSocialSecurityTax = payPerPeriod * socialSecurityTaxRate;
-        let periodMedicareTax = payPerPeriod * medicareTaxRate;
-        let periodStateTax = payPerPeriod * stateTaxRate;
-
-        //Calculate total tax and net pay
-        let periodTotalTax = periodFederalTax + periodSocialSecurityTax + periodMedicareTax + periodStateTax;
-        let periodNetPay = payPerPeriod - periodTotalTax;
-
-}
-    </script>
+    <script src="js-payroll-calculation.js"></script>
 </body>
